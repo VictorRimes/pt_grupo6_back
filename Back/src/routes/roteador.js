@@ -1,9 +1,9 @@
 const express = require('express');
-const {teste, criarUsuario} = require('../controller/requisicoes')
+const {criarUsuario, lerUsuario} = require('../controller/requisicoes')
 
 const rotas = express();
 
-rotas.get('/', teste)
 rotas.post('/criar', criarUsuario)
+rotas.get('/usuario/:id', lerUsuario);
 
 module.exports = rotas;
