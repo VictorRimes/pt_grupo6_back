@@ -10,27 +10,37 @@ const criarUsuario = async (req, res) => {
         return res.status(400).json('mensagem: Todos os campos são obrigatorios.');
     };
 
-    const novo = await prisma.users.create({
-        data: {
-            profile_picture,
-            username,
-            email,
-            gender,
-            job_title: {
-                create: {
-                    name: job_title,
-                    team: 'teste',
-                    created_at: '2023-12-02T02:24:00.000Z'
+    try {
+        const novo = await prisma.users.create({
+            data: {
+                profile_picture,
+                username,
+                email,
+                gender,
+                job_title: {
+                    create: {
+                        name: job_title,
+                        team: 'teste',
+                        created_at: '2023-12-02T02:24:00.000Z'
+                    },
                 },
-            },
-            password,
-            admin,
-            created_at,
-            updated_at
+                password,
+                admin,
+                created_at,
+                updated_at
+            }
+        })
+        if (ler) {
+            return res.status(201).json(novo)
+        } else {
+            return res.status(404).json({ error: "Usuario não foi criado" })
         }
-    })
 
-    return res.status(201).json(novo)
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Erro ao criar usuario" });
+    }
+
 };
 
 const lerUsuario = async (req, res) => {
@@ -54,12 +64,12 @@ const lerUsuario = async (req, res) => {
         if (ler) {
             return res.status(200).json(ler)
         } else {
-            return res.status(404).json({ error: "Cliente não encontrado" })
+            return res.status(404).json({ error: "Usuario não encontrado" })
         }
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: "Erro ao buscar cliente" });
+        res.status(500).json({ error: "Erro ao buscar usuario" });
     }
 }
 
