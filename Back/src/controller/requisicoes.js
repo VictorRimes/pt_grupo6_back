@@ -2,7 +2,6 @@ const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
 
-// Adicionar o try catch
 const criarUsuario = async (req, res) => {
     const { profile_picture, username, email, gender, job_title, password, admin, created_at, updated_at } = req.body;
 
@@ -71,9 +70,37 @@ const lerUsuario = async (req, res) => {
         console.error(error);
         res.status(500).json({ error: "Erro ao buscar usuario" });
     }
+};
+
+const atualizarUsuario = async (req, res) => {
+    const { id } = req.params;
+
+    const { profile_picture, username, job_title, email } = req.body;
+
+    try {
+        const atualizar = await prisma.users.update({
+            where: {
+                id: Number(id)
+            },
+            data: {
+                profile_picture,
+                username,
+                job_title,
+                email
+            }
+        }
+        )
+
+        return res.status(200).json({mensagem: "Dados atualizados"})
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({mensagem: "Erro ao atualizar usuario."})
+    }
 }
 
 module.exports = {
     criarUsuario,
-    lerUsuario
+    lerUsuario,
+    atualizarUsuario
 };
