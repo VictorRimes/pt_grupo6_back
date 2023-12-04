@@ -91,16 +91,34 @@ const atualizarUsuario = async (req, res) => {
         }
         )
 
-        return res.status(200).json({mensagem: "Dados atualizados"})
+        return res.status(200).json({ mensagem: "Dados atualizados" })
 
     } catch (error) {
         console.error(error);
-        return res.status(500).json({mensagem: "Erro ao atualizar usuario."})
+        return res.status(500).json({ mensagem: "Erro ao atualizar usuario." })
+    }
+};
+
+const deletarUsuario = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const deletar = await prisma.users.delete({
+            where: {
+                id: Number(id)
+            }
+        })
+
+        return res.status(200).json({mensagem: "Usuario deletado"})
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ mensagem: "Erro ao deletar usuario." })
     }
 }
 
 module.exports = {
     criarUsuario,
     lerUsuario,
-    atualizarUsuario
+    atualizarUsuario,
+    deletarUsuario
 };
