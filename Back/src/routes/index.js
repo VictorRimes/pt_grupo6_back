@@ -32,12 +32,12 @@ app.get('/feed', async (req, res) => {
 // Preencher a tela de perfil com os dados de um usuario
 
 app.get('/perfil/:id', async(req,res)=>{
-    const user = await prisma.User.findUnique({
+    const user = await prisma.users.findUnique({
         where:{
-            id:req.params.id
+            id: Number(req.params.id)
         },
         include:{
-            post:true
+            posts:true
         }
     })
     console.log(user)
@@ -46,7 +46,7 @@ app.get('/perfil/:id', async(req,res)=>{
 
 // ^ isso deve pegar todas as informacoes de um usuario e preencher a tela com as informacoes
 
-app.post('/post' , async(res,req) => {
+app.post('/post' , async(req,res) => {
     try {
         const { userId, content } = req.body;
         // Verifica se tem usuario com esse id
@@ -180,7 +180,7 @@ app.post('/posts/:postId/comments', async (req, res) => {
 });
 
 // Deletar um comentário associado a um post
-router.delete('/posts/:postId/comments/:commentId', async (req, res) => {
+app.delete('/posts/:postId/comments/:commentId', async (req, res) => {
     try {
         const commentId = parseInt(req.params.commentId); // Obtém o ID do comentário a ser deletado
 
